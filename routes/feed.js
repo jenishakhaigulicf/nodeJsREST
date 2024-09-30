@@ -1,9 +1,10 @@
 const express = require("express");
 
-const feedController = require('../controllers/feed')
+const feedController = require("../controllers/feed");
 
-const router =  express.Router();
+const router = express.Router();
 
-router.get('/posts', feedController.getPosts)
+router.get("/posts", feedController.getPosts);
+router.post("/posts", feedController.postPosts)
 
 module.exports = router;
