@@ -20,12 +20,10 @@ exports.getPosts = (req, res, next) => {
 exports.createPosts = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res
-      .status(422)
-      .json({
-        message: `${errors.array()[0].path}: ${errors.array()[0].msg}`,
-        errors: errors.array(),
-      });
+    return res.status(422).json({
+      message: `${errors.array()[0].path}: ${errors.array()[0].msg}`,
+      errors: errors.array(),
+    });
   }
   res.status(201).json({
     message: "Post created successfully!",
