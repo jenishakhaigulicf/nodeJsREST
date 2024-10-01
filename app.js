@@ -14,7 +14,8 @@ const feedRoutes = require("./routes/feed");
 const app = express();
 
 app.use(bodyParser.json());
-app.use("/images", express.static(path.join(__dirname)));
+// Note: __dirname will give the path of current file, images is the sibling folder
+app.use("/images", express.static(path.join(__dirname, "images")));
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -27,6 +28,13 @@ app.use((req, res, next) => {
 });
 
 app.use("/feed", feedRoutes);
+
+// Note: part2: general error handling function
+app.use((error, req, res, next) => {
+  const status = error.statusCode || 500;
+  const message = error.message;
+  res.status(status).json({ message });
+});
 
 // mongoose
 //   .connect("")
