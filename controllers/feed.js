@@ -1,5 +1,7 @@
 const { validationResult } = require("express-validator");
 
+const Post = require("../models/post");
+
 exports.getPosts = (req, res, next) => {
   res.status(200).json({
     posts: [
@@ -25,13 +27,23 @@ exports.createPosts = (req, res, next) => {
       errors: errors.array(),
     });
   }
+  Post.create({
+    ...req.body,
+    imageUrl: "images/duck.jpg",
+    creator: { name: "Jenisha" },
+  })
+    .then((response) => {
+      console.log(response.dataValues);
   res.status(201).json({
     message: "Post created successfully!",
-    post: {
-      _id: new Date().toISOString(),
-      ...req.body,
-      creator: { name: "Jenisha" },
-      createdAt: new Date(),
-    },
+        post: response.dataValues,
+      });
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      console.log(err);
+      next(err);
   });
 };

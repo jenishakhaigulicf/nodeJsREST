@@ -1,26 +1,58 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+// const mongoose = require("mongoose");
+// const Schema = mongoose.Schema;
 
-const postSchema = new Schema(
+// mongoDB
+// const postSchema = new Schema(
+//   {
+//     title: {
+//       type: String,
+//       required: true,
+//     },
+//     imageUrl: {
+//       type: String,
+//       required: true,
+//     },
+//     content: {
+//       type: String,
+//       required: true,
+//     },
+//     creator: {
+//       type: Object,
+//       required: true,
+//     },
+//   },
+//   { timestamps: true }
+// );
+
+// module.exports = mongoose.model("Post", postSchema);
+
+const Sequelize = require("sequelize");
+
+const sequelize = require("../util/database");
+
+const Post = sequelize.define(
+  "Post",
   {
     title: {
-      type: String,
-      required: true,
+      type: Sequelize.STRING,
+      allowNull: false,
     },
     imageUrl: {
-      type: String,
-      required: true,
+      type: Sequelize.STRING,
+      allowNull: false,
     },
     content: {
-      type: String,
-      required: true,
+      type: Sequelize.STRING,
+      allowNull: false,
     },
     creator: {
-      type: Object,
-      required: true,
+      type: Sequelize.JSON,
+      allowNull: false,
     },
   },
-  { timestamps: true }
+  {
+    timestamps: true, // Sequelize will automatically manage `createdAt` and `updatedAt`
+  }
 );
 
-module.exports = mongoose.model("Post", postSchema);
+module.exports = Post;
