@@ -25,14 +25,15 @@ exports.createPosts = (req, res, next) => {
     );
     error.statusCode = 422;
     throw error;
-    // return res.status(422).json({
-    //   message: `${errors.array()[0].path}: ${errors.array()[0].msg}`,
-    //   errors: errors.array(),
-    // });
+  }
+  if (!req.file) {
+    const error = new Error("No image provided");
+    error.statusCode = 422;
+    throw error;
   }
   Post.create({
     ...req.body,
-    imageUrl: "images/duck.jpg",
+    imageUrl: req.file.path,
     creator: { name: "Jenisha" },
   })
     .then((response) => {
