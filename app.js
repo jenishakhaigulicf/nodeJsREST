@@ -11,6 +11,8 @@ const sequelize = require("./util/database");
 const multer = require("multer");
 
 const feedRoutes = require("./routes/feed");
+const User = require("./models/user");
+const Post = require("./models/post")
 
 const app = express();
 
@@ -58,7 +60,9 @@ app.use("/feed", feedRoutes);
 app.use((error, req, res, next) => {
   const status = error.statusCode || 500;
   const message = error.message;
-  res.status(status).json({ message });
+User.hasMany(Post, {
+  foreignKey: "userId",
+  as: "posts",
 });
 
 // mongoose
