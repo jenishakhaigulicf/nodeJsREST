@@ -75,6 +75,11 @@ User.hasMany(Post, {
   as: "posts",
 });
 
+Post.belongsTo(User, {
+  foreignKey: "id", // foreign key in Post model
+  as: "creatorDetails", // alias for the association
+});
+
 // mongoose
 //   .connect("")
 //   .then((res) => {

@@ -4,6 +4,7 @@ const path = require("path");
 const { validationResult } = require("express-validator");
 
 const Post = require("../models/post");
+const User = require("../models/user");
 
 exports.getPosts = (req, res, next) => {
   Post.findAll()
@@ -37,12 +38,22 @@ exports.createPosts = (req, res, next) => {
   Post.create({
     ...req.body,
     imageUrl: req.file.path,
-    creator: { name: "Jenisha" },
+    // creator: { name: "Jenisha" },
+    creator: req.userId,
   })
-    .then((response) => {
+    .then((post) => {
+      return User.findByPk(req.userId).then((user) => {
+        return user.addPost(post).then(() => {
+          return { user, post }; // return both the user and the post for later steps
+          // return user.save();
+        });
+      });
+    })
+    .then(({ user, post }) => {
       res.status(201).json({
         message: "Post created successfully!",
-        post: response.dataValues,
+        creator: { id: user.id, name: user.name },
+        post: post.dataValues,
       });
     })
     .catch((err) => {
