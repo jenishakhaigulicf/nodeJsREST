@@ -55,6 +55,19 @@ exports.login = (req, res, next) => {
         error.statusCode = 401;
         throw error;
       }
+      const token = jwt.sign(
+        {
+          email: loadedUser.email,
+          userId: loadedUser.id.toString(),
+        },
+        "secret",
+        { expiresIn: "1h" }
+      );
+      return res.status(200).json({
+        message: "login successful",
+        token,
+        userId: loadedUser.id.toString(),
+      });
     })
     .catch((err) => {
       if (!err.statusCode) {

@@ -14,7 +14,7 @@ const authRoutes = require("./routes/auth");
 const feedRoutes = require("./routes/feed");
 
 const User = require("./models/user");
-const Post = require("./models/post")
+const Post = require("./models/post");
 
 const app = express();
 
@@ -66,12 +66,12 @@ app.use("/feed", feedRoutes);
 app.use((error, req, res, next) => {
   const status = error.statusCode || 500;
   const message = error.message;
-  const data = error.data || []
+  const data = error.data || [];
   res.status(status).json({ message, data });
 });
 
 User.hasMany(Post, {
-  foreignKey: "userId",
+  foreignKey: "id",
   as: "posts",
 });
 
