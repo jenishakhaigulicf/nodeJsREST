@@ -10,7 +10,9 @@ const bodyParser = require("body-parser");
 const sequelize = require("./util/database");
 const multer = require("multer");
 
+const authRoutes = require("./routes/auth");
 const feedRoutes = require("./routes/feed");
+
 const User = require("./models/user");
 const Post = require("./models/post")
 
@@ -23,7 +25,10 @@ const fileStorage = multer.diskStorage({
   },
   // for filename
   filename: (req, file, cb) => {
-    cb(null, new Date().toISOString().replace(/:/g, '-') + "-" + file.originalname);
+    cb(
+      null,
+      new Date().toISOString().replace(/:/g, "-") + "-" + file.originalname
+    );
   },
 });
 
@@ -54,12 +59,17 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use("/auth", authRoutes);
 app.use("/feed", feedRoutes);
 
 // Note: part2: general error handling function
 app.use((error, req, res, next) => {
   const status = error.statusCode || 500;
   const message = error.message;
+  const data = error.data || []
+  res.status(status).json({ message, data });
+});
+
 User.hasMany(Post, {
   foreignKey: "userId",
   as: "posts",
