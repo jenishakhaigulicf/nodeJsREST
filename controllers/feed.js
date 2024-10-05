@@ -114,7 +114,7 @@ exports.updatePost = (req, res, next) => {
       }
       post.title = req.body.title;
       post.content = req.body.content;
-      post.imageUrl = imageUrl
+      post.imageUrl = imageUrl;
       return post.save();
     })
     .then((post) => {
@@ -132,4 +132,28 @@ exports.updatePost = (req, res, next) => {
 const clearImage = (filePath) => {
   filePath = path.join(__dirname, "..", filePath);
   fs.unlink(filePath, (err) => console.log(err));
+};
+
+exports.deletePost = (req, res, next) => {
+  const postId = req.params.postId;
+  Post.findByPk(postId)
+    .then((post) => {
+      // Check logged in user
+      if (!post) {
+        const err = new Error("Could not find the post");
+        err.statusCode = 404;
+        throw err;
+      }
+      clearImage(post.imageUrl);
+      return post.destroy();
+      // return Post.findB
+    })
+    .then(() => res.status(200).json({ message: "Deleted post" }))
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      console.log("error->", err);
+      next(err);
+    });
 };
