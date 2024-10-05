@@ -1,7 +1,7 @@
 const Sequelize = require("sequelize");
 const sequelize = require("../util/database");
 
-const User = sequelize.define("User", {
+const User = sequelize.define("UserAuth", {
   email: {
     type: Sequelize.STRING,
     allowNull: true,
@@ -16,14 +16,15 @@ const User = sequelize.define("User", {
   },
   status: {
     type: Sequelize.STRING,
-    allowNull: true,
+    // allowNull: true,
+    defaultValue: "I am new",
   },
-//   posts: [
-//     {
-//       type: checkSchema.Types.ObjectId,
-//       ref: "Post",
-//     },
-//   ],
+  //   posts: [
+  //     {
+  //       type: checkSchema.Types.ObjectId,
+  //       ref: "Post",
+  //     },
+  //   ],
 });
 
-module.exports = User
+module.exports = User;
